@@ -8,8 +8,10 @@ const progressContainer = document.querySelector(".progress-container");
 const title = document.querySelector("#title");
 const cover = document.querySelector("#cover");
 const volume = document.querySelector("#volume-control");
-// songs titles
+const endTime = document.querySelector(".endTime");
+const currTime = document.querySelector(".currentTime");
 
+// songs titles
 const songs = ["hey", "summer", "ukulele"];
 
 //Keep track of songs
@@ -21,7 +23,7 @@ audio.volume = 0.1;
 
 //update the song details
 function loadSong(song) {
-  title.innerHTML = `${song} is playing`;
+  title.textContent = `${song} is playing`;
   audio.src = `music/${song}.mp3`;
   cover.src = `images/${song}.jpg`;
 }
@@ -57,11 +59,21 @@ function prevSong() {
   loadSong(songs[songIndex]);
   playSong();
 }
+function formatTime(seconds) {
+  minutes = Math.floor(seconds / 60);
+  minutes = minutes >= 10 ? minutes : "0" + minutes;
+  seconds = Math.floor(seconds % 60);
+  seconds = seconds >= 10 ? seconds : "0" + seconds;
+  return minutes + ":" + seconds;
+}
 
 function updateProgress(e) {
   const { duration, currentTime } = e.srcElement;
-  const progressPercent = (currentTime / duration) * 100;
+  const progressPercent = (currentTime * 100) / duration;
   progress.style.width = `${progressPercent}%`;
+
+  currTime.textContent = formatTime(currentTime);
+  endTime.textContent = formatTime(duration);
 }
 
 function setProgress(e) {
